@@ -1,0 +1,7 @@
+# Generated / runtime data
+Kairox/chunks/
+Kairox/logs/
+Kairox/proofs/
+
+# Build artifacts
+Kairox/target/
