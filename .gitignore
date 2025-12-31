@@ -5,3 +5,6 @@ Kairox/proofs/
 
 # Build artifacts
 Kairox/target/
+
+# Added venv
+Kairox/venv
