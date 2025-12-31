@@ -398,13 +398,22 @@ def main():
                 cf.write(line + "\n")
 
         # Write metadata (chunk root, full root, line hashes)
-        with open(os.path.join(chunk_dir, "meta.txt"), "w") as mf:
-            mf.write(f"chunk_id: {chunk_id}\n")
-            mf.write(f"start_line: {start_idx}\n")
-            mf.write(f"end_line: {start_idx + len(chunk_lines) - 1}\n")
-            mf.write(f"chunk_merkle_root: {chunk_root}\n")
-            mf.write(f"full_merkle_root: {full_root}\n")
-
+        # with open(os.path.join(chunk_dir, "meta.txt"), "w") as mf:
+        #     mf.write(f"chunk_id: {chunk_id}\n")
+        #     mf.write(f"start_line: {start_idx}\n")
+        #     mf.write(f"end_line: {start_idx + len(chunk_lines) - 1}\n")
+        #     mf.write(f"chunk_merkle_root: {chunk_root}\n")
+        #     mf.write(f"full_merkle_root: {full_root}\n")
+        with open(os.path.join(chunk_dir, "meta.json"), "w") as f:
+            f.write(
+                f"""{{
+  "chunk_id": {chunk_id},
+  "start_line": {start_idx},
+  "end_line": {start_idx + len(chunk_lines) - 1},
+  "chunk_root": "{chunk_root}",
+  "full_root": "{full_root}"
+}}"""
+            )
 
         print(f"Chunk {chunk_id} created:")
         print(f"  Lines: {start_idx} → {start_idx + len(chunk_lines) - 1}")
