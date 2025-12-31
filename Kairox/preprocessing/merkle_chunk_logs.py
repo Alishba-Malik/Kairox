@@ -404,8 +404,7 @@ def main():
             mf.write(f"end_line: {start_idx + len(chunk_lines) - 1}\n")
             mf.write(f"chunk_merkle_root: {chunk_root}\n")
             mf.write(f"full_merkle_root: {full_root}\n")
-            for i, h in enumerate(chunk_line_hashes):
-                mf.write(f"{i}:{h}\n")
+
 
         print(f"Chunk {chunk_id} created:")
         print(f"  Lines: {start_idx} → {start_idx + len(chunk_lines) - 1}")
