@@ -432,7 +432,7 @@ from multiprocessing import Pool, cpu_count
 # -----------------------------
 # Cairo parameters
 # -----------------------------
-FELT_MOD = 2**251 + 17 * 2**192 + 1  # Cairo prime
+FELT_MOD = 0x800000000000011000000000000000000000000000000000000000000000001 # Cairo prime
 
 # -----------------------------
 # Hash utilities
