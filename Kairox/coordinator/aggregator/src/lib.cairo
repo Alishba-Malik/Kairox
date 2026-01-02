@@ -110,7 +110,6 @@ struct StwoProof {
 
 // Internal helper to compute the Binary Merkle Root
 fn compute_binary_root(mut nodes: Span<felt252>) -> felt252 {
-    // Base cases
     if nodes.len() == 0 { return 0; }
     if nodes.len() == 1 { return *nodes.at(0); }
 
@@ -121,18 +120,17 @@ fn compute_binary_root(mut nodes: Span<felt252>) -> felt252 {
         let left = *nodes.at(i);
         
         if i + 1 < nodes.len() {
-            // Case: We have a pair
             let right = *nodes.at(i + 1);
+            // Explicitly match Python (left + right) % MOD
             next_level.append(left + right);
         } else {
-            // Case: Odd node at the end of the level
-            // MUST match Python: next_level.append(hash_node(left, left))
-            next_level.append(left + left);
+            // MATCH PYTHON EXACTLY: nodes[i+1] if exists else nodes[i]
+            // This hashes the odd node with itself.
+            next_level.append(left + left); 
         }
         i += 2;
     };
 
-    // Recursively calculate the next level
     compute_binary_root(next_level.span())
 }
 
