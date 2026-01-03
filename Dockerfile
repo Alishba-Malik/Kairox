@@ -13,7 +13,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Python dependencies
-RUN pip3 install --no-cache-dir multiprocessing-logging
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+RUN pip install multiprocessing-logging
 
 # Install Scarb via starkup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.starkup.dev | bash
