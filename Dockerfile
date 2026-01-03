@@ -1,7 +1,7 @@
 # Base image
 FROM ubuntu:24.04
 
-# System dependencies
+# 1. Combined System Dependencies (One layer to save 'apt update' time)
 RUN apt-get update && apt-get install -y \
     curl \
     git \
@@ -11,24 +11,29 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     bash \
     ca-certificates \
+    tar \
     && rm -rf /var/lib/apt/lists/*
 
-# Python dependencies
+# 2. Python Virtual Environment
 RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir multiprocessing-logging
 
-# Install Scarb via starkup
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.starkup.dev | sh
-
-# Add starkup tools to PATH
-ENV PATH="/root/.starkup/bin:${PATH}"
+# 3. Direct Scarb Installation (The "Fast" Way)
+# This replaces the slow starkup script. 
+RUN SCARB_VERSION=2.13.1 && \
+    curl -L "https://github.com/software-mansion/scarb/releases/download/v${SCARB_VERSION}/scarb-v${SCARB_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o scarb.tar.gz && \
+    tar -xvf scarb.tar.gz && \
+    mv scarb-v${SCARB_VERSION}-x86_64-unknown-linux-musl/bin/scarb /usr/local/bin/scarb && \
+    rm -rf scarb.tar.gz scarb-v${SCARB_VERSION}-x86_64-unknown-linux-musl
 
 # Set working directory
 WORKDIR /Kairox
 
-# Copy project
+# Copy project (do this last so code changes don't break the build cache)
 COPY . /Kairox
 
-# Default shell
+# Verify installation during build
+RUN scarb --version
+
 CMD ["/bin/bash"]
