@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  kairox:
+    build: .
+    container_name: kairox
+    tty: true
+    stdin_open: true
+    working_dir: /Kairox
+    volumes:
+      - ./logs:/Kairox/logs
+      - ./chunks:/Kairox/chunks
+      - ./proofs:/Kairox/proofs
+    command: /bin/bash
